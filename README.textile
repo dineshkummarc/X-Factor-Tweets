@@ -1,0 +1,25 @@
+h1. X Factor Tweets - a Twitter Node.js WebSocket Experiment
+
+http://xfactortweets.com
+
+Quick experiment of direct streaming from twitter to the browser, with no polling, using Node.js.
+Follow up to http://github.com/andregoncalves/twitter-nodejs-websocket, using "Socket.io":http://socket.io/  and "twitter-node":http://github.com/technoweenie/twitter-node
+Adapted from http://github.com/rishav/twitter-nodejs-websocket
+
+Blog post by andre - "here":http://bit.ly/71uZNv.
+
+h2. Requirements:
+
+* Node.js.
+* HTML5 WebSocket capable browser.
+
+h2. How To:
+
+When cloning projects from github, make sure you use the @--recursive@ option to get subprojects.
+
+* Download and install node.js
+* Clone this project from github
+* Download and install npm and install "twitter-node":http://github.com/technoweenie/twitter-node and "socket.io":http://github.com/LearnBoost/Socket.IO-node
+* Start the server: @node server.js <twitter_username> <twitter_password> <optional_keyword>@.
+* Open the site with a WebSocket compatible browser (Chrome or Webkit nightly).
+

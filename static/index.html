@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8" />
+
+  <!-- www.phpied.com/conditional-comments-block-downloads/ -->
+  <!--[if IE]><![endif]-->
+
+  <!-- Chartbeat tracking -->
+  <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
+
+  <!-- Twitter @anywhere client -->
+  <script src="http://platform.twitter.com/anywhere.js?id=lle1sWxp16Ula5FkWKTeKg&v=1" type="text/javascript"></script>
+
+  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
+       Remove this if you use the .htaccess -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>X-Factor Tweets</title>
+  <meta name="description" content="[Unofficial] Realtime stream of X Factor tweets, with buzz ranking." />
+  <meta name="author" content="" />
+
+  <!--  Mobile Viewport Fix
+        j.mp/mobileviewport & davidbcalhoun.com/2010/viewport-metatag 
+  device-width : Occupy full width of the screen in its current orientation
+  initial-scale = 1.0 retains dimensions instead of zooming out if page height > device height
+  maximum-scale = 1.0 retains dimensions instead of zooming in if page width < device width
+  -->
+  <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
+
+
+  <!-- Place favicon.ico and apple-touch-icon.png in the root of your domain and delete these references -->
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+
+  <!-- CSS : implied media="all" -->
+  <link rel="stylesheet" href="css/style.css?v=1" />
+
+  <!-- For the less-enabled mobile browsers like Opera Mini -->
+  <link rel="stylesheet" media="handheld" href="css/handheld.css?v=1" />
+
+ 
+  <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
+  <script src="js/modernizr-1.5.min.js"></script>
+
+</head>
+
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+
+<!--[if lt IE 7 ]> <body class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <body class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <body class="ie8"> <![endif]-->
+<!--[if (gt IE 8)|!(IE)]><!--> <body> <!--<![endif]-->
+
+  <div id="container">
+    <header>
+		<h1>X-Factor Tweets</h1>
+		<p>Your <strong>perfect X-Factor companion</strong>!  Watch tweets about the X Factor stream <strong>live</strong> while you watch the show on TV.  See the contestants rise and fall to see who's being talked about the most!</p>
+    </header>
+    
+    <div id="main">
+    	
+    	<div id="tbox"></div>
+
+    	<aside id="tweets"></aside>
+    	
+    	<!-- Tweet Button -->
+    	<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="xftweets" data-related="thexfactor:Official XFactor Tweets">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    	
+    	<!-- Facebook Like -->
+		<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fxfactortweets.com&amp;layout=button_count&amp;show_faces=true&amp;width=450&amp;action=awesome&amp;font=trebuchet+ms&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:150px; height:21px;" allowTransparency="true"></iframe>
+	
+		<article id="xfactor"></article>
+		
+		<noscript>This page requires JavaScript.</noscript>
+		
+    </div>
+    
+    <footer>
+		<p>Unofficial. <strong>This site is not connected with the X Factor, the judges or the contestants in any way</strong>.  Images and brand are reproduced from publically available assets and used in a not-for-profit context.  Find the offical <a href="http://twitter.com/thexfactor">Twitter Account here</a> and the real <a href="http://twitter.com/TheXFactor/finalists/members">contestants here</a>.</p>
+    </footer>
+  </div> <!--! end of #container -->
+
+<div id="chat"><p>Connecting...</p></div>
+
+
+  <!-- Javascript at the bottom for fast page loading -->
+
+  <!-- Grab Google CDN's jQuery. fall back to local if necessary -->
+  <script src="js/jquery-1.4.2.min.js"></script>
+<!--  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script> -->
+  <script>!window.jQuery && document.write('<script src="js/jquery-1.4.2.min.js"><\/script>')</script>
+
+	<script src="/json.js"></script> <!-- for ie -->
+	<script src="/socket.io/socket.io.js"></script>
+
+  <script src="js/raphael-min.js"></script>
+  <script src="js/plugins.js?v=1"></script>
+  <script src="js/script.js?v=1"></script>
+
+  <!--[if lt IE 7 ]>
+    <script src="js/dd_belatedpng.js?v=1"></script>
+  <![endif]-->
+
+
+  <!-- asynchronous google analytics: mathiasbynens.be/notes/async-analytics-snippet 
+       change the UA-XXXXX-X to be your site's ID -->
+  <script>
+   var _gaq = [['_setAccount', 'UA-19005791-1'], ['_trackPageview']];
+   (function(d, t) {
+    var g = d.createElement(t),
+        s = d.getElementsByTagName(t)[0];
+    g.async = true;
+    g.src = '//www.google-analytics.com/ga.js';
+    s.parentNode.insertBefore(g, s);
+   })(document, 'script');
+  </script>
+  
+  <!-- Chartbeat tracking -->
+	<script type="text/javascript">
+	var _sf_async_config={uid:6068,domain:"xfactortweets.com"};
+	(function(){
+	  function loadChartbeat() {
+	    window._sf_endpt=(new Date()).getTime();
+	    var e = document.createElement('script');
+	    e.setAttribute('language', 'javascript');
+	    e.setAttribute('type', 'text/javascript');
+	    e.setAttribute('src',
+	       (("https:" == document.location.protocol) ? "https://s3.amazonaws.com/" : "http://") +
+	       "static.chartbeat.com/js/chartbeat.js");
+	    document.body.appendChild(e);
+	  }
+	  var oldonload = window.onload;
+	  window.onload = (typeof window.onload != 'function') ?
+	     loadChartbeat : function() { oldonload(); loadChartbeat(); };
+	})();
+	</script>
+</body>
+</html>
