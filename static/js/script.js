@@ -51,6 +51,7 @@ var XFTweets = (function($){
 	};
 	Contestant.prototype.updateLine = function() {
 		this.history.push(this.data.rank);
+/*
 		var offsetHistory = Math.max(this.history.length-10,0);
 		var pathstr = '';
 		for (var i=offsetHistory;i<this.history.length;i++) {
@@ -58,6 +59,16 @@ var XFTweets = (function($){
 				else pathstr+='L';
 			pathstr+=(60*(i-offsetHistory))+" "+(((contestantCount-this.history[i])*CONTESTANT_HEIGHT)+(CONTESTANT_HEIGHT/2));
 		}
+*/
+		var svgWidth = 570;
+		var stepWidth = svgWidth/this.history.length;
+		var pathstr = '';
+		for (var i=0;i<this.history.length;i++) {
+			if (i==0) pathstr+='M';
+				else pathstr+='L';
+			pathstr+=(stepWidth*i)+" "+(((contestantCount-this.history[i])*CONTESTANT_HEIGHT)+(CONTESTANT_HEIGHT/2));
+		}
+
 		this.path.attr("path", pathstr);
 	};
 	Contestant.prototype.setRank = function(rank) {
@@ -69,7 +80,6 @@ var XFTweets = (function($){
 
 	
 	var updateLines = function() {
-		rankContestants();
 		for (var name in contestants) {
 			contestants[name].updateLine();
 		}
@@ -94,7 +104,6 @@ var XFTweets = (function($){
 			if (tweet.text.match(reg)) {
 				console.log(tweet.text, contestants[name].data.twitter_keywords, tweet.text.match(reg));
 				contestants[name].addTweet(tweet.text);
-				updateLines();
 			}
 		}
 		var $newTweet = $('<div class="tweet"></div>');
@@ -107,9 +116,11 @@ var XFTweets = (function($){
 		});
 		$('aside').append($newTweet);
 		$newTweet.fadeIn('fast');
+		rankContestants();
 	};
 	var rankContestants = function() {
 		var sortArr = [];
+		var rerankFlag = false;
 		for (var name in contestants) {
 			sortArr.push(contestants[name]);
 		}
@@ -117,8 +128,12 @@ var XFTweets = (function($){
 			return (a.data.mention_count - b.data.mention_count);
 		});
 		for (var i=0;i<sortArr.length;i++) {
-			if (sortArr[i].data.rank!==(i+1)) sortArr[i].setRank(i+1);
+			if (sortArr[i].data.rank!==(i+1)) {
+				rerankFlag = true;
+				sortArr[i].setRank(i+1);
+			}
 		}
+		if (rerankFlag) updateLines();
 	};
 	
 	
