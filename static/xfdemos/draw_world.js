@@ -62,6 +62,10 @@ function drawShape(shape, context) {
 			// draw circle
 			context.strokeStyle = 'rgba(0,0,0,0)';
 			context.fillStyle = "rgba(128,0,0,0.5)";
+			if (circle.m_userData.text=="X") {
+				context.strokeStyle = 'rgba(0,0,0,0.8)';
+				context.fillStyle = 'rgba(128,0,0,0.9)';
+			}
 			context.arc(pos.x, pos.y, r, 0, 2.0 * Math.PI, false);
 			context.fill();
 
@@ -77,7 +81,8 @@ function drawShape(shape, context) {
 				context.font = "12px avemedium, 'Avenir LT Std', 'Avenir LT Pro', Avenir, Helvetica, Arial, sans-serif";
 				context.textAlign = "center";
 				context.fontWeight = "bold";
-				if (r>=20) context.fillText(circle.m_userData.text, pos.x, pos.y+5);
+//				if (r>=20)
+					context.fillText(circle.m_userData.text, pos.x, pos.y+5);
 			}
 			
 		}

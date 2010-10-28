@@ -23,12 +23,14 @@ twit.track(KEYWORD)
 var buffer = [];
 twit
  .addListener('tweet', function(tweet) {
-	callbackAddTweet(tweet.text);
+   for(var i=0; i < broadcast_clients.length; i++) {
+		broadcast_clients[i].send({text:tweet.text, author:tweet.user.screen_name, image:tweet.user.profile_image_url})
+	}
  })
 
  .addListener('end', function(resp) {
    	for(var i=0; i < broadcast_clients.length; i++) {
-			callbackAddTweet('end');
+			broadcast_clients[i].send({message:[1,"wave goodbye... " + resp.statusCod]})
 		}
  })
  .stream();
@@ -43,6 +45,15 @@ server = http.createServer(function(req, res){
 			fs.readFile(__dirname + '/static/index.html', function(err, data){
 				if (err) return send404(res);
 				res.writeHead(200, 'text/html');
+				res.write(data, 'utf8');
+				res.end();
+			});
+			break;
+			
+		case '/json.js':
+			fs.readFile(__dirname + path, function(err, data){
+				if (err) return send404(res);
+				res.writeHead(200, {'Content-Type': path == 'json.js' ? 'text/javascript' : 'text/html'});
 				res.write(data, 'utf8');
 				res.end();
 			});
@@ -92,8 +103,7 @@ var io = io.listen(server);
 io.on('connection', function(client){
 	broadcast_clients.push(client) ;
 	client.send({ buffer: buffer });
-	client.send(logged_history[-2]);
-	client.send(logged_history[-1]);
+	
 	
 	client.on('message', function(message){
 		var msg = { message: [client.sessionId, message] };
@@ -109,37 +119,4 @@ io.on('connection', function(client){
 });
 
 
-// PROCESS TWEETS
-
-var logged_history = [{date:new Date(), words:{}},{date:new Date(), words:{}}];
-var words = {};
-var timeinterval = 5000;
-
-// each new tweet
-var RE_break_into_words = /\b(\w+)\b/g;
-var callbackAddTweet = function(tweet) {
-	// break into "words"
-	var matches = tweet.match(RE_break_into_words);
-	for (var i=0;i<matches.length;i++) {
-		var word = matches[i];
-		// increment each word
-		if (words[word]) words[word]++;
-		else words[word] = 1;
-	}
-};
-
-// update history
-setInterval(function() {
-	// if time>timestamp, create new timestamp
-	var new_words  = {};
-	for (var word in words) {
-		new_words[word] = words[word];
-	}
-	var new_log = {date:new Date(), words:new_words};
-	logged_history.push(new_log);
-	for(var i=0; i < broadcast_clients.length; i++) {
-		broadcast_clients[i].send(new_log)
-	}
-	words = [];
-}, timeinterval);
 

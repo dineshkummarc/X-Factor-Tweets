@@ -59,11 +59,13 @@
 		<p>Your <strong>perfect X-Factor companion</strong>!  Watch tweets about the X Factor stream <strong>live</strong> while you watch the show on TV.  See the contestants rise and fall to see who's being talked about the most!</p>
     </header>
     
-    <div id="main">
+    <div id="main" style="position:relative">
     	
     	<div id="tbox"></div>
 
     	<aside id="tweets"></aside>
+
+		<canvas id="canvas" width="600" height="400" style="position:absolute;top:300px;left:20px;"></canvas>
     	
     	<!-- Tweet Button -->
     	<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="xftweets" data-related="thexfactor:Official XFactor Tweets">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
@@ -73,7 +75,6 @@
 	
 		<article id="xfactor"></article>
 		
-		<canvas id="canvas" width="600" height="400"></canvas>
 
 		<noscript>This page requires JavaScript.</noscript>
 		
@@ -93,19 +94,6 @@
   <script src="js/jquery-1.4.2.min.js"></script>
 <!--  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script> -->
   <script>!window.jQuery && document.write('<script src="js/jquery-1.4.2.min.js"><\/script>')</script>
-
-<script>
-// enable the @anywhere tweet box
-  twttr.anywhere(function (T) {
-    T("#tbox").tweetBox({
-    	defaultContent: "I'm watching the XFactor with XFactor Tweets! #xfactor http://xfactortweets.com",
-    	width:680,
-    	height:65,
-    	label:'Tweet your support!'
-    });
-  });
-
-</script>
 
   <!--[if lt IE 7 ]>
 	<script src="/json.js"></script>
@@ -186,14 +174,13 @@
 		<!-- demos -->
     <script src='xfdemos/draw_world.js'></script>
 	<script src="/socket.io/socket.io.js"></script>
+
     <script src='xfdemos/x-balls.js'></script>
     <script src='xfdemos/demos.js'></script>
 
-<!--
   <script src="js/raphael-min.js"></script>
   <script src="js/plugins.js?v=1"></script>
   <script src="js/script.js?v=1"></script>
--->
 
   <!--[if lt IE 7 ]>
     <script src="js/dd_belatedpng.js?v=1"></script>

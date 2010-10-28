@@ -102,7 +102,7 @@ var XFTweets = (function($){
 			var reg = new RegExp(contestants[name].data.twitter_keywords, 'i');
 			
 			if (tweet.text.match(reg)) {
-				console.log(tweet.text, contestants[name].data.twitter_keywords, tweet.text.match(reg));
+//				console.log(tweet.text, contestants[name].data.twitter_keywords, tweet.text.match(reg));
 				contestants[name].addTweet(tweet.text);
 			}
 		}
@@ -156,6 +156,7 @@ jQuery.getScript( 'js/x-contestants.js' )
 
   function message(obj){
 	XFTweets.callbackAddTweet({text:obj.text, image:obj.image, author:obj.author});
+	callbackAddTweet(obj);
   }
   
   

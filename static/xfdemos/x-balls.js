@@ -26,19 +26,24 @@ var word_balls = {};
 
 xballs.setWordBall = function(word, radius) {
 	var centre = xballs.centreball.GetCenterPosition();
-	if (radius<1) {
+	if (radius<0.2) {
 		if (word_balls[word]) {
 			// destruction doesn't seem to work
-//			world.DestroyBody(word_balls[word]);
-//			word_balls[word] = null;
+			world.DestroyBody(word_balls[word]);
+			word_balls[word] = null;
 		}
 		return;
 	}
 	if (!word_balls[word]) {
-		var offset = {x:Math.random()*10 - 5, y:Math.random()*10 - 5};
-		xballs.balls.push(word_balls[word] = xballs.createBall(world, centre.x+offset.x, centre.y+offset.y, 10, false, word));
+		var scalefactor = radius*15;
+		var offset = {x:Math.random()*scalefactor - (scalefactor/2), y:Math.random()*scalefactor - (scalefactor/2)};
+		xballs.balls.push(word_balls[word] = xballs.createBall(world, centre.x+offset.x, centre.y+offset.y, scalefactor, false, word));
 	}
-	word_balls[word].scaleTo(radius*5);
+	try {
+		word_balls[word].scaleTo(radius*15);
+	} catch (e) {
+		// no idea why this gets thrown in FF
+	}
 }
 xballs.initWorld = function(world) {
 
@@ -57,16 +62,10 @@ xballs.initWorld = function(world) {
 
 // array of timestamp->words->count
 var logged_history = [{date:new Date(), words:{}},{date:new Date(), words:{}}];
+var words = {};
 var timeinterval = 5000;
 
 // each new tweet
-	var RE_break_into_words = /\b(\w+)\b/g;
-	var callbackAddLog = function(log_obj) {
-		// add to history
-//		console.log(log_obj);
-		logged_history.push(log_obj);
-	};
-
 	
 	$(document).ready(function(){
 
@@ -82,6 +81,7 @@ var timeinterval = 5000;
 			if (!newwords.updatedate) newwords.updatedate = new Date();
 			var dateDiff = (new Date() - newwords.updatedate) / timeinterval;
 			
+			var biggestSize = 0;
 			// fill out the new word set with missing words, mostly so they can be removed
 			for (var word in oldwords.words) {
 				if (!newwords.words[word]) {
@@ -89,11 +89,18 @@ var timeinterval = 5000;
 				}
 			}
 			for (var word in newwords.words) {
+				// work out a limit on size
+				biggestSize = Math.max(biggestSize, newwords.words[word]);
+			}
+			var maxCounter = 0;
+			for (var word in newwords.words) {
 				// work out new count (float)
 				// set radius (or delete) (or add)
-				if (!oldwords.words[word]) continue;
-				var countDelta = (newwords.words[word] - oldwords.words[word]) * dateDiff;
-				xballs.setWordBall(word, countDelta + oldwords.words[word]);
+				if (!oldwords.words[word]) oldwords.words[word] = 0;
+				var countDelta = (newwords.words[word] - oldwords.words[word]) * dateDiff
+				var newRadius = countDelta + oldwords.words[word];
+				if (newwords.words[word] < biggestSize - 20) newRadius = 0;
+				xballs.setWordBall(word, newRadius*3/biggestSize);
 			}
 			
 		}, 100);
@@ -101,26 +108,37 @@ var timeinterval = 5000;
 		
 		// get the tweets!
 		
-		function esc(msg){
-			return msg.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-		};
-		
-		var socket = new io.Socket(null, {port: 80});
-		socket.connect();
-		socket.on('message', function(obj){
-			if (obj['buffer']){
-				for (var i in obj.buffer) callbackAddLog(obj.buffer[i]);
-			} else callbackAddLog(obj);
-		});
-		var socket_timer = 1;
-		socket.on('disconnect', function(){
-			socket_timer *= 2;
-			setTimeout(socket.connect, socket_timer*500);
-		}) 
-
+		// (called from script.js)
 	});
 
 
+// PROCESS TWEETS
+
+
+// each new tweet
+var RE_break_into_words = /\b(\w+)\b/g;
+var callbackAddTweet = function(tweet) {
+	// break into "words"
+	var matches = tweet.text.match(RE_break_into_words);
+	for (var i=0;i<matches.length;i++) {
+		var word = matches[i];
+		// increment each word
+		if (words[word]) words[word]++;
+		else words[word] = 1;
+	}
+};
+
+// update history
+setInterval(function() {
+	// if time>timestamp, create new timestamp
+	var new_words  = {};
+	for (var word in words) {
+		new_words[word] = words[word];
+	}
+	var new_log = {date:new Date(), words:new_words};
+	logged_history.push(new_log);
+	words = [];
+}, timeinterval);
 
 
 
