@@ -24,6 +24,7 @@ var buffer = [];
 twit
  .addListener('tweet', function(tweet) {
    for(var i=0; i < broadcast_clients.length; i++) {
+		sys.puts(tweet.text);
 		broadcast_clients[i].send({text:tweet.text, author:tweet.user.screen_name, image:tweet.user.profile_image_url})
 	}
  })
@@ -94,7 +95,7 @@ send404 = function(res){
 	res.end();
 };
 
-server.listen(80)
+server.listen(8000)
 // socket.io, I choose you
 // simplest chat application evar
 var io = io.listen(server);
@@ -109,6 +110,7 @@ io.on('connection', function(client){
 		var msg = { message: [client.sessionId, message] };
 		buffer.push(msg);
 		if (buffer.length > 15) buffer.shift();
+		sys.puts(msg);
 		client.broadcast(msg);
 	});
 
